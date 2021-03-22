@@ -23,12 +23,13 @@ class DownloadView(FormView):
 
     def form_valid(self, form):
         url_base = form.cleaned_data["url"]
-        pages = form.cleaned_data["pages"]
+        initial_page = form.cleaned_data["initial_page"]
+        end_page = form.cleaned_data["end_page"]
         name_list = url_base.split("/")[-2:][:-1]
         name = "".join(name_list)
         data = ""
-        for page in range(1, pages + 1):
-            data += f"<br><br><br><h2>Página {page} </h2><br><br><br>"
+        for page in range(initial_page, end_page + 1):
+            data += f"<br><br><br><h2>Página {page} de {end_page} </h2><br><br><br>"
             url = url_base if page == 1 else f"{url_base}page-{page}"
             response = requests.get(url, allow_redirects=True)
             html = BeautifulSoup(response.text, features="html.parser")
